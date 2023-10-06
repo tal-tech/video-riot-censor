@@ -1,0 +1,67 @@
+name: "cls_image_riot_resnet18_pipeline"
+platform: "ensemble"
+max_batch_size: 0
+input [
+  {
+    name: "input"
+    data_type: TYPE_UINT8
+    dims: [-1]
+  }
+]
+output [
+  {
+    name: "result"
+    data_type: TYPE_INT32
+    dims: [1]
+  },
+  {
+    name: "prob"
+    data_type: TYPE_FP32
+    dims: [1]
+  }
+]
+
+ensemble_scheduling {
+  step [
+    {
+      model_name: "cls_image_riot_resnet18_preprocess"
+      model_version: -1
+      input_map {
+        key: "rawimg"
+        value: "input"
+      }
+      output_map {
+        key: "preprocessed_img"
+        value: "preprocessed_img"
+      }
+    },
+    {
+      model_name: "cls_image_riot_resnet18_onnx_model"
+      model_version: -1
+      input_map {
+        key: "input.1"
+        value: "preprocessed_img"
+      }
+      output_map {
+        key: "199"
+        value: "det_probs"
+      }
+    },
+    {
+      model_name: "cls_image_riot_resnet18_postprocess"
+      model_version: -1
+      input_map {
+        key: "det_probs"
+        value: "det_probs"
+      }
+      output_map {
+        key: "result"
+        value: "result"
+      }
+      output_map {
+        key: "prob"
+        value: "prob"
+      }
+    }
+  ]
+}

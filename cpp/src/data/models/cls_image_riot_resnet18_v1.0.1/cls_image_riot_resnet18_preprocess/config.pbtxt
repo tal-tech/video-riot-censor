@@ -1,0 +1,24 @@
+name: "cls_image_riot_resnet18_preprocess"
+platform: "custom"
+default_model_filename: "libforge.so"
+max_batch_size: 0
+input [
+  {
+    name : "rawimg"
+    data_type: TYPE_UINT8
+    dims: [-1]
+  }
+]
+output [
+  {
+    name : "preprocessed_img"
+    data_type: TYPE_FP32
+    dims: [3, 224, 224]
+  }
+]
+parameters {
+  key: "entry"
+  value: {
+    string_value: "process.py"
+  }
+}

@@ -1,0 +1,29 @@
+name: "cls_image_riot_resnet18_postprocess"
+platform: "custom"
+default_model_filename: "libforge.so"
+max_batch_size: 0
+input [
+  {
+    name : "det_probs"
+    data_type: TYPE_FP32
+    dims: [1, 4]
+  }
+]
+output [
+  {
+    name : "result"
+    data_type: TYPE_INT32
+    dims: [1]
+  },
+  {
+    name: "prob"
+    data_type: TYPE_FP32
+    dims: [1]
+  }
+]
+parameters {
+  key: "entry"
+  value: {
+    string_value: "process.py"
+  }
+}
